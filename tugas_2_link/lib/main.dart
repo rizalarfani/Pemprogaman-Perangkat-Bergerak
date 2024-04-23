@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_dashboard/dashboard_page.dart';
+import 'package:tugas_2_link/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +11,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Tugas Dashboard',
-      debugShowCheckedModeBanner: false,
+      title: 'Tugas 3 Link',
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: false,
       ),
-      home: const DashboardPage(),
+      home: const HomePage(),
     );
   }
 }
