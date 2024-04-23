@@ -17,25 +17,25 @@ class DashboardPage extends StatelessWidget {
             height: 180,
             width: double.infinity,
             decoration: const BoxDecoration(
-              color: Color.fromRGBO(16, 96, 175, 1),
+              color: Color.fromRGBO(41, 136, 240, 1),
             ),
-            child: SafeArea(
+            child: const SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 5),
+                  SizedBox(height: 5),
                   Text(
                     'Mohamad Rijal Arfani',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  SizedBox(height: 5),
                   Text(
                     'A18.2023.00046',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
                       color: Colors.white,
@@ -49,7 +49,15 @@ class DashboardPage extends StatelessWidget {
             top: 90,
             left: 0,
             right: 0,
-            child: itemMenu(),
+            child: GridView(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              children: [
+                itemMenu(),
+                itemMenu(),
+              ],
+            ),
           )
         ],
       ),
@@ -63,8 +71,16 @@ class DashboardPage extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         border: Border.all(
-          color: const Color.fromRGBO(16, 96, 175, 1),
+          color: const Color.fromRGBO(41, 136, 240, 1),
         ),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 7,
+            spreadRadius: 0,
+            offset: Offset(0, 2),
+            color: Color.fromRGBO(0, 0, 0, 0.1),
+          ),
+        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -74,7 +90,7 @@ class DashboardPage extends StatelessWidget {
             height: 60,
             width: 60,
             decoration: const BoxDecoration(
-              color: Color.fromRGBO(16, 96, 175, 1),
+              color: Color.fromRGBO(41, 136, 240, 1),
               shape: BoxShape.circle,
             ),
             child: const Center(
@@ -86,7 +102,7 @@ class DashboardPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 13),
-          Text(
+          const Text(
             'Transaksi',
             style: TextStyle(
               fontSize: 16,
