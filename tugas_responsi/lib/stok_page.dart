@@ -30,55 +30,7 @@ class _StokPageState extends State<StokPage> {
         'expired': '09/08/2025 05:28 PM',
         'created': '09/04/2024 05:28 PM',
         'updated': '10/05/2024 10:28 PM',
-      },
-      {
-        'name': 'Obat Batuk',
-        'harga': 'Rp. 15.000',
-        'stok': 10,
-        'expired': '09/08/2025 05:28 PM',
-        'created': '09/04/2024 05:28 PM',
-        'updated': '10/05/2024 10:28 PM',
-      },
-      {
-        'name': 'Obat Batuk',
-        'harga': 'Rp. 15.000',
-        'stok': 10,
-        'expired': '09/08/2025 05:28 PM',
-        'created': '09/04/2024 05:28 PM',
-        'updated': '10/05/2024 10:28 PM',
-      },
-      {
-        'name': 'Obat Batuk',
-        'harga': 'Rp. 15.000',
-        'stok': 10,
-        'expired': '09/08/2025 05:28 PM',
-        'created': '09/04/2024 05:28 PM',
-        'updated': '10/05/2024 10:28 PM',
-      },
-      {
-        'name': 'Obat Batuk',
-        'harga': 'Rp. 15.000',
-        'stok': 10,
-        'expired': '09/08/2025 05:28 PM',
-        'created': '09/04/2024 05:28 PM',
-        'updated': '10/05/2024 10:28 PM',
-      },
-      {
-        'name': 'Obat Batuk',
-        'harga': 'Rp. 15.000',
-        'stok': 10,
-        'expired': '09/08/2025 05:28 PM',
-        'created': '09/04/2024 05:28 PM',
-        'updated': '10/05/2024 10:28 PM',
-      },
-      {
-        'name': 'Obat Batuk',
-        'harga': 'Rp. 15.000',
-        'stok': 10,
-        'expired': '09/08/2025 05:28 PM',
-        'created': '09/04/2024 05:28 PM',
-        'updated': '10/05/2024 10:28 PM',
-      },
+      }
     ];
   }
 
