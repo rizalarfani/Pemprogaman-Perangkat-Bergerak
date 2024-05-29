@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as client;
+import 'package:listview_http/add_barang.dart';
 import 'package:listview_http/barang_model.dart';
 
 class ListBarang extends StatefulWidget {
@@ -85,6 +86,28 @@ class _ListBarangState extends State<ListBarang> {
                 );
               },
             ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurple,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          final result = Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const AddBarang(),
+            ),
+          );
+          result.then((value) {
+            getDataBarang().then((value) {
+              setState(() {
+                getListBarang = value;
+              });
+            });
+          });
+        },
+      ),
     );
   }
 }
