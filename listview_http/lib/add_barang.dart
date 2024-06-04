@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as client;
 import 'package:listview_http/success_model.dart';
+import 'package:listview_http/constant.dart';
 
 class AddBarang extends StatefulWidget {
   const AddBarang({super.key});
@@ -41,7 +42,7 @@ class _AddBarangState extends State<AddBarang> {
     };
 
     final response = await client.post(
-      Uri.parse('http://192.168.21.197/tugas-ppb/simpan_barang.php'),
+      Uri.parse('${Constant.baseUrl}simpan_barang.php'),
       body: body,
     );
 

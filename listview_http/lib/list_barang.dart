@@ -1,9 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as client;
 import 'package:listview_http/add_barang.dart';
 import 'package:listview_http/barang_model.dart';
+import 'package:listview_http/constant.dart';
+import 'package:listview_http/success_model.dart';
 
 class ListBarang extends StatefulWidget {
   const ListBarang({super.key});
@@ -17,14 +20,26 @@ class _ListBarangState extends State<ListBarang> {
   bool isLoading = false;
 
   Future<List<Barang>> getDataBarang() async {
-    final response =
-        await client.get(Uri.parse('http://192.168.21.197/tugas-ppb/'));
+    final response = await client.get(Uri.parse(Constant.baseUrl));
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       return jsonResponse.map((data) => Barang.fromJson(data)).toList();
     } else {
       throw Exception('Failed to load data');
+    }
+  }
+
+  Future<SuccessModel> deleteBarang(String kodeBarang) async {
+    final response = await client
+        .post(Uri.parse('${Constant.baseUrl}/delete_barang.php'), body: {
+      'kode_barang': kodeBarang,
+    });
+
+    if (response.statusCode == 200) {
+      return SuccessModel.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to Delete Data');
     }
   }
 
@@ -79,6 +94,70 @@ class _ListBarangState extends State<ListBarang> {
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text(
+                                  'Delete Data',
+                                ),
+                                content: const Text(
+                                  "Apakah anda yakin untuk menhapus data ini?",
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () async {
+                                      SuccessModel response =
+                                          await deleteBarang(barang.kodeBarang);
+                                      if (response.status == 'success') {
+                                        Navigator.pop(context);
+                                        getDataBarang().then((value) {
+                                          setState(() {
+                                            getListBarang = value;
+                                          });
+                                        });
+                                        Fluttertoast.showToast(
+                                          msg: response.message,
+                                          backgroundColor: Colors.black,
+                                        );
+                                      }
+                                      if (response.status != 'success') {
+                                        Fluttertoast.showToast(
+                                          msg: response.message,
+                                          backgroundColor: Colors.redAccent,
+                                        );
+                                      }
+                                    },
+                                    child: const Text(
+                                      'Confirm',
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.delete,
+                          color: Colors.redAccent,
                         ),
                       ),
                     ),
