@@ -6,6 +6,7 @@ import 'package:http/http.dart' as client;
 import 'package:listview_http/add_barang.dart';
 import 'package:listview_http/barang_model.dart';
 import 'package:listview_http/constant.dart';
+import 'package:listview_http/edit_barang.dart';
 import 'package:listview_http/success_model.dart';
 
 class ListBarang extends StatefulWidget {
@@ -82,6 +83,23 @@ class _ListBarangState extends State<ListBarang> {
                   padding: const EdgeInsets.all(5),
                   child: Card(
                     child: ListTile(
+                      onTap: () {
+                        var navigate =
+                            Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return EditBarang(barang: barang);
+                          },
+                        ));
+                        navigate.then(
+                          (value) {
+                            getDataBarang().then((value) {
+                              setState(() {
+                                getListBarang = value;
+                              });
+                            });
+                          },
+                        );
+                      },
                       title: Text(
                         barang.nama,
                         style: const TextStyle(
