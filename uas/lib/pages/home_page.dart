@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:uas/pages/tikets_mysql_page.dart';
+import 'package:uas/pages/firebase_page.dart';
+import 'package:uas/pages/mysql_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -124,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const TiketsMysqlPage(),
+                            builder: (context) => const MysqlPage(),
                           ));
                     },
                     child: const Text(
@@ -133,7 +134,13 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 10),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const FirebasePage(),
+                          ));
+                    },
                     child: const Text(
                       "Database Firebase",
                     ),

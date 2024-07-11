@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:uas/utils/tiket_model.dart';
@@ -11,7 +12,8 @@ import '../utils/success_model.dart';
 
 class EditPage extends StatefulWidget {
   final Tiket tiket;
-  const EditPage({super.key, required this.tiket});
+  final bool isFirebase;
+  const EditPage({super.key, required this.tiket, required this.isFirebase});
 
   @override
   State<EditPage> createState() => _EditPageState();
@@ -54,6 +56,27 @@ class _EditPageState extends State<EditPage> {
     } else {
       throw Exception('Failed to Update Data');
     }
+  }
+
+  void updateDataToFirebase(String docId) async {
+    var collection = FirebaseFirestore.instance.collection('tikets');
+    collection.doc(docId).update({
+      'no_kursi': selectedKursi,
+      'nama_pelangan': namaPelanggan?.text,
+      'email': emailPelanggan?.text,
+      'tanggal': DateTime.now().toString(),
+    }).then((value) {
+      Fluttertoast.showToast(
+        msg: "Berhasil edit data ke firebase",
+        backgroundColor: Colors.black,
+      );
+      Navigator.pop(context);
+    }).catchError((error) {
+      Fluttertoast.showToast(
+        msg: 'Gagal edit data ke firebase',
+        backgroundColor: Colors.redAccent,
+      );
+    });
   }
 
   @override
@@ -187,18 +210,22 @@ class _EditPageState extends State<EditPage> {
               ButtonWidget(
                 title: 'Update Data',
                 onTap: () async {
-                  SuccessModel edit = await updateData();
-                  if (edit.status == 'success') {
-                    Fluttertoast.showToast(
-                      msg: edit.message,
-                      backgroundColor: Colors.black,
-                    );
-                    Navigator.pop(context);
+                  if (widget.isFirebase) {
+                    updateDataToFirebase(widget.tiket.ticketId);
                   } else {
-                    Fluttertoast.showToast(
-                      msg: edit.message,
-                      backgroundColor: Colors.redAccent,
-                    );
+                    SuccessModel edit = await updateData();
+                    if (edit.status == 'success') {
+                      Fluttertoast.showToast(
+                        msg: edit.message,
+                        backgroundColor: Colors.black,
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: edit.message,
+                        backgroundColor: Colors.redAccent,
+                      );
+                    }
                   }
                 },
               ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,7 +12,8 @@ import 'package:http/http.dart' as client;
 import '../utils/success_model.dart';
 
 class SimpanPage extends StatefulWidget {
-  const SimpanPage({super.key});
+  final bool isFirebase;
+  const SimpanPage({super.key, required this.isFirebase});
 
   @override
   State<SimpanPage> createState() => _SimpanPageState();
@@ -23,7 +25,7 @@ class _SimpanPageState extends State<SimpanPage> {
   TextEditingController? namaFilm;
   TextEditingController? namaPelanggan;
   TextEditingController? emailPelanggan;
-  TextEditingController? jamTayang;
+  String? selectedTime;
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _SimpanPageState extends State<SimpanPage> {
   Future<SuccessModel> addData() async {
     Map<String, dynamic> body = {
       "judul_film": namaFilm?.text ?? '',
-      "waktu_tayang": jamTayang?.text ?? '',
+      "waktu_tayang": selectedTime,
       "nama_pelanggan": namaPelanggan?.text ?? '',
       "email_pelanggan": emailPelanggan?.text,
       "nomor_kursi": selectedKursi,
@@ -60,6 +62,24 @@ class _SimpanPageState extends State<SimpanPage> {
     } else {
       throw Exception('Failed to Simpan Data');
     }
+  }
+
+  void addDataToFirebase() async {
+    var collection = FirebaseFirestore.instance.collection('tikets');
+    collection.add({
+      'nama_film': namaFilm?.text,
+      'jam_tayang': selectedTime,
+      'no_kursi': selectedKursi,
+      'nama_pelangan': namaPelanggan?.text,
+      'email': emailPelanggan?.text,
+      'tanggal': DateTime.now().toString(),
+    }).then((value) {
+      Fluttertoast.showToast(msg: "Berhasil Tambah Barang");
+      Navigator.pop(context);
+    }).catchError((onError) {
+      Fluttertoast.showToast(
+          msg: 'Gagal Tambah barang', backgroundColor: Colors.redAccent);
+    });
   }
 
   @override
@@ -120,7 +140,6 @@ class _SimpanPageState extends State<SimpanPage> {
               ),
               const SizedBox(height: 10),
               DateTimeField(
-                controller: jamTayang,
                 format: time!,
                 decoration: InputDecoration(
                   hintText: "Jam Tayang",
@@ -150,6 +169,8 @@ class _SimpanPageState extends State<SimpanPage> {
                     initialTime:
                         TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
                   );
+                  selectedTime =
+                      DateFormat.Hm().format(currentValue ?? DateTime.now());
                   return DateTimeField.convert(time);
                 },
               ),
@@ -281,18 +302,22 @@ class _SimpanPageState extends State<SimpanPage> {
                   if (namaFilm!.text.isNotEmpty &&
                       namaPelanggan!.text.isNotEmpty &&
                       emailPelanggan!.text.isNotEmpty) {
-                    SuccessModel response = await addData();
-                    if (response.status == 'success') {
-                      Fluttertoast.showToast(
-                        msg: response.message,
-                        backgroundColor: Colors.black,
-                      );
-                      Navigator.pop(context);
+                    if (widget.isFirebase) {
+                      addDataToFirebase();
                     } else {
-                      Fluttertoast.showToast(
-                        msg: response.message,
-                        backgroundColor: Colors.redAccent,
-                      );
+                      SuccessModel response = await addData();
+                      if (response.status == 'success') {
+                        Fluttertoast.showToast(
+                          msg: response.message,
+                          backgroundColor: Colors.black,
+                        );
+                        Navigator.pop(context);
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: response.message,
+                          backgroundColor: Colors.redAccent,
+                        );
+                      }
                     }
                   }
                 },

@@ -11,14 +11,14 @@ import 'package:uas/widgets/item_widget.dart';
 import '../utils/success_model.dart';
 import '../utils/tiket_model.dart';
 
-class TiketsMysqlPage extends StatefulWidget {
-  const TiketsMysqlPage({super.key});
+class MysqlPage extends StatefulWidget {
+  const MysqlPage({super.key});
 
   @override
-  State<TiketsMysqlPage> createState() => _TiketsMysqlPageState();
+  State<MysqlPage> createState() => _MysqlPageState();
 }
 
-class _TiketsMysqlPageState extends State<TiketsMysqlPage> {
+class _MysqlPageState extends State<MysqlPage> {
   List<Tiket>? getListTikets;
   bool isLoading = false;
 
@@ -91,7 +91,10 @@ class _TiketsMysqlPageState extends State<TiketsMysqlPage> {
                         var navigate =
                             Navigator.push(context, MaterialPageRoute(
                           builder: (context) {
-                            return EditPage(tiket: tiket);
+                            return EditPage(
+                              tiket: tiket,
+                              isFirebase: false,
+                            );
                           },
                         ));
                         navigate.then(
@@ -178,7 +181,8 @@ class _TiketsMysqlPageState extends State<TiketsMysqlPage> {
           final result = Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const SimpanPage(),
+              builder: (BuildContext context) =>
+                  const SimpanPage(isFirebase: false),
             ),
           );
           result.then((value) {
